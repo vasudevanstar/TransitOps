@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TransitOps — Smart Transport Operations Platform</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ================= AUTHENTICATION / LOGIN SCREEN ================= -->
+  <div id="auth-screen" class="auth-wrapper">
+    <div class="auth-card">
+      <div class="auth-brand-side">
+        <div class="brand-glow"></div>
+        <div class="brand-content">
+          <div class="logo-icon-large">
+            <svg viewBox="0 0 24 24" width="48" height="48" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <h1>TransitOps</h1>
+          <p class="subtitle">Smart Transport Operations Platform</p>
+          
+          <div class="role-instructions">
+            <h3>Enterprise Role Profiles (Quick Login):</h3>
+            <div class="role-grid">
+              <div class="role-card" onclick="quickLogin('admin@transitops.in')">
+                <span class="role-title">Administrator</span>
+                <span class="role-desc">System Controls &amp; Logs</span>
+              </div>
+              <div class="role-card" onclick="quickLogin('manager@transitops.in')">
+                <span class="role-title">Fleet Manager</span>
+                <span class="role-desc">Fleet &amp; Maintenance</span>
+              </div>
+              <div class="role-card" onclick="quickLogin('dispatcher@transitops.in')">
+                <span class="role-title">Dispatcher</span>
+                <span class="role-desc">Dashboard &amp; Trips</span>
+              </div>
+              <div class="role-card" onclick="quickLogin('alex@transitops.in')">
+                <span class="role-title">Driver (Alex)</span>
+                <span class="role-desc">In-transit trip updates</span>
+              </div>
+              <div class="role-card" onclick="quickLogin('safety@transitops.in')">
+                <span class="role-title">Safety Officer</span>
+                <span class="role-desc">Drivers &amp; Compliance</span>
+              </div>
+              <div class="role-card" onclick="quickLogin('analyst@transitops.in')">
+                <span class="role-title">Financial Analyst</span>
+                <span class="role-desc">Fuel &amp; Expenses</span>
+              </div>
+            </div>
+            <p class="footer-note">TRANSITOPS &copy; 2026 &middot; ADVANCED RBAC PROTOCOLS</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="auth-form-side">
+        <div class="form-container">
+          <h2>Sign in to your account</h2>
+          <p class="form-subtitle">Enter your credentials to continue</p>
+          
+          <div id="auth-error" class="error-banner hidden">
+            <span class="error-icon">❌</span>
+            <span id="error-message" class="error-text">Invalid credentials.</span>
+          </div>
+          
+          <form id="login-form">
+            <div class="form-group">
+              <label for="login-email">EMAIL</label>
+              <input type="email" id="login-email" required placeholder="email@transitops.in">
+            </div>
+            
+            <div class="form-group">
+              <div class="label-row">
+                <label for="login-password">PASSWORD</label>
+                <a href="#" class="forgot-link">Forgot password?</a>
+              </div>
+              <input type="password" id="login-password" required placeholder="••••••••">
+            </div>
+
+            <div class="form-group">
+              <label for="login-role">ROLE (RBAC)</label>
+              <div class="select-wrapper">
+                <select id="login-role" required>
+                  <option value="Administrator">Administrator</option>
+                  <option value="Fleet Manager">Fleet Manager</option>
+                  <option value="Dispatcher" selected>Dispatcher</option>
+                  <option value="Driver">Driver</option>
+                  <option value="Safety Officer">Safety Officer</option>
+                  <option value="Financial Analyst">Financial Analyst</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <label class="checkbox-container">
+                <input type="checkbox" id="login-remember">
+                <span class="checkmark"></span>
+                Remember me
+              </label>
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MAIN APP LAYOUT ================= -->
+  <div id="app-screen" class="app-layout hidden">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <h2>TransitOps</h2>
+      </div>
+      
+      <div class="nav-section-title">FILTERS &amp; VIEWS</div>
+      <nav class="sidebar-nav">
+        <ul>
+          <li data-view="dashboard" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+            <span>Dashboard</span>
+          </li>
+          <!-- Driver view link -->
+          <li data-view="driver-portal" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span>Driver Portal</span>
+          </li>
+          <li data-view="fleet" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><rect x="9" y="9" width="6" height="6"/></svg>
+            <span>Fleet Registry</span>
+          </li>
+          <li data-view="drivers" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <span>Drivers &amp; Safety</span>
+          </li>
+          <li data-view="trips" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            <span>Trip Dispatcher</span>
+          </li>
+          <li data-view="maintenance" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            <span>Maintenance</span>
+          </li>
+          <li data-view="fuel" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            <span>Fuel &amp; Expenses</span>
+          </li>
+          <li data-view="analytics" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            <span>Analytics</span>
+          </li>
+          
+          <!-- System Admin specific view links -->
+          <li data-view="users" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+            <span>User Management</span>
+          </li>
+          <li data-view="audit" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            <span>Audit Logs</span>
+          </li>
+          
+          <li data-view="settings" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            <span>Settings &amp; RBAC</span>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="rbac-switcher-inline">
+          <label for="quick-role-select">DEMO ROLE:</label>
+          <select id="quick-role-select" class="select-sm">
+            <option value="Administrator">Administrator</option>
+            <option value="Fleet Manager">Fleet Manager</option>
+            <option value="Dispatcher">Dispatcher</option>
+            <option value="Driver">Driver</option>
+            <option value="Safety Officer">Safety Officer</option>
+            <option value="Financial Analyst">Financial Analyst</option>
+          </select>
+        </div>
+        <button id="logout-btn" class="btn btn-secondary btn-block btn-sm">
+          <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" style="margin-right: 6px;"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Sign Out
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Workspace Container -->
+    <main class="main-workspace">
+      <!-- Top Header -->
+      <header class="app-header">
+        <div class="header-search">
+          <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" class="search-icon"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="global-search" placeholder="Search registration, locations...">
+        </div>
+        
+        <div class="header-actions">
+          <div class="user-profile">
+            <div class="user-text">
+              <span id="header-user-name" class="user-name">Raven K.</span>
+              <span id="header-role-badge" class="role-badge">Dispatcher</span>
+            </div>
+            <div id="header-avatar" class="user-avatar">RK</div>
+          </div>
+        </div>
+      </header>
+
+      <!-- View Wrapper for switching content panels -->
+      <div class="view-content-wrapper">
+        
+        <!-- View Permissions Locked Message (Overlaid when clicking forbidden view) -->
+        <div id="lockout-overlay" class="lockout-screen hidden">
+          <div class="lockout-card">
+            <div class="lockout-icon">🔐</div>
+            <h2>Access Denied (RBAC Matrix)</h2>
+            <p>Your current role (<strong id="lockout-current-role">Dispatcher</strong>) does not have authorization to access this panel. Switch roles using the switcher in the sidebar to test other module permissions.</p>
+            <div class="allowed-roles-info">
+              <span>Authorized Roles:</span> <span id="lockout-required-roles" class="badge-role-req">Fleet Manager</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= 1. DASHBOARD VIEW ================= -->
+        <section id="view-dashboard" class="app-view hidden">
+          <div class="view-header">
+            <div>
+              <h1>Dashboard Overview</h1>
+              <p class="subtitle">Personalized system parameters and resource status updates</p>
+            </div>
+          </div>
+
+          <!-- Dynamic Metrics Grid -->
+          <div class="stats-grid" id="dashboard-metrics-grid">
+            <!-- Rendered dynamically depending on role -->
+          </div>
+
+          <!-- Dynamic Widgets Layout -->
+          <div class="content-grid-two" id="dashboard-widgets-grid">
+            <!-- Rendered dynamically depending on role -->
+          </div>
+        </section>
+
+
+        <!-- ================= 2. VEHICLE REGISTRY VIEW ================= -->
+        <section id="view-fleet" class="app-view hidden">
+          <div class="view-header">
+            <div>
+              <h1>Vehicle Registry</h1>
+              <p class="subtitle">Manage company logistics assets and active fleet registration</p>
+            </div>
+            <button class="btn btn-primary" onclick="openModal('modal-add-vehicle')">+ Add Vehicle</button>
+          </div>
+
+          <!-- Search and Filter Bar -->
+          <div class="filter-bar glass-card">
+            <div class="filter-group">
+              <label for="filter-vehicle-type">Type:</label>
+              <select id="filter-vehicle-type" onchange="applyVehicleFilters()">
+                <option value="All">All Types</option>
+                <option value="Van">Van</option>
+                <option value="Truck">Truck</option>
+                <option value="Mini">Mini</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label for="filter-vehicle-status">Status:</label>
+              <select id="filter-vehicle-status" onchange="applyVehicleFilters()">
+                <option value="All">All Statuses</option>
+                <option value="Available">Available</option>
+                <option value="On Trip">On Trip</option>
+                <option value="In Shop">In Shop</option>
+                <option value="Retired">Retired</option>
+              </select>
+            </div>
+
+            <div class="search-filter">
+              <input type="text" id="search-vehicle" placeholder="Search registration number..." oninput="applyVehicleFilters()">
+            </div>
+          </div>
+
+          <!-- Vehicles Table -->
+          <div class="card glass-card">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>REG. NO. (UNIQUE)</th>
+                    <th>NAME/MODEL</th>
+                    <th>TYPE</th>
+                    <th>CAPACITY</th>
+                    <th>ODOMETER (KM)</th>
+                    <th>ACQ. COST</th>
+                    <th>STATUS</th>
+                    <th>ACTIONS</th>
+                  </tr>
+                </thead>
+                <tbody id="fleet-tbody">
+                  <!-- Rendered dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- ================= 3. DRIVERS & SAFETY PROFILES VIEW ================= -->
+        <section id="view-drivers" class="app-view hidden">
+          <div class="view-header">
+            <div>
+              <h1>Drivers &amp; Safety Profiles</h1>
+              <p class="subtitle">Roster management, license validations, and driver compliance ratings</p>
+            </div>
+            <button class="btn btn-primary" onclick="openModal('modal-add-driver')">+ Add Driver</button>
+          </div>
+
+          <div class="alert-warning-banner">
+            <span>Rule: Drivers with expired licenses or "Suspended" status are automatically blocked from trip assignment.</span>
+          </div>
+
+          <!-- Drivers Roster -->
+          <div class="card glass-card">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>DRIVER</th>
+                    <th>LICENSE NO.</th>
+                    <th>CATEGORY</th>
+                    <th>EXPIRY</th>
+                    <th>CONTACT</th>
+                    <th>TRIP COMPL.</th>
+                    <th>SAFETY SCORE</th>
+                    <th>STATUS</th>
+                    <th>TOGGLE STATUS</th>
+                  </tr>
+                </thead>
+                <tbody id="drivers-tbody">
+                  <!-- Rendered dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- ================= 4. TRIP DISPATCHER VIEW ================= -->
+        <section id="view-trips" class="app-view hidden">
+          <div class="view-header">
+            <div>
+              <h1>Trip Dispatcher</h1>
+              <p class="subtitle">Schedule cargo dispatches and track trips across depots</p>
+            </div>
+          </div>
+
+          <div class="content-grid-two">
+            <!-- Create Trip Form -->
+            <div class="card glass-card">
+              <div class="card-header">
+                <h3>Create New Dispatch Trip</h3>
+              </div>
+              <form id="create-trip-form" class="standard-form">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="trip-source">SOURCE</label>
+                    <input type="text" id="trip-source" required placeholder="Depot A">
+                  </div>
+                  <div class="form-group">
+                    <label for="trip-destination">DESTINATION</label>
+                    <input type="text" id="trip-destination" required placeholder="Hub B">
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="trip-vehicle">VEHICLE (AVAILABLE ONLY)</label>
+                    <select id="trip-vehicle" required onchange="validateTripCapacity()">
+                      <!-- Populated dynamically -->
+                    </select>
+                    <div id="trip-vehicle-cap-info" class="field-hint">Select a vehicle to inspect capacity</div>
+                  </div>
+                  <div class="form-group">
+                    <label for="trip-driver">DRIVER (AVAILABLE &amp; VALID LICENSE ONLY)</label>
+                    <select id="trip-driver" required>
+                      <!-- Populated dynamically -->
+                    </select>
+                    <div id="trip-driver-lic-info" class="field-hint">Select driver</div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="trip-weight">CARGO WEIGHT (KG)</label>
+                    <input type="number" id="trip-weight" required min="1" placeholder="e.g. 500" oninput="validateTripCapacity()">
+                  </div>
+                  <div class="form-group">
+                    <label for="trip-distance">PLANNED DISTANCE (KM)</label>
+                    <input type="number" id="trip-distance" required min="1" placeholder="e.g. 45">
+                  </div>
+                </div>
+
+                <!-- Dynamic Warning Container -->
+                <div id="capacity-error-container" class="error-banner card-error hidden">
+                  <div class="error-inner">
+                    <span class="error-icon">❌</span>
+                    <div>
+                      <strong>Capacity Overload Blocked</strong>
+                      <p id="capacity-error-text">Vehicle Capacity: 500 kg | Cargo Weight: 700 kg. Capacity exceeded by 200 kg.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-actions">
+                  <button type="submit" id="trip-submit-btn" class="btn btn-primary">Dispatch</button>
+                  <button type="button" class="btn btn-secondary" onclick="resetTripForm()">Cancel</button>
+                </div>
+              </form>
+            </div>
+
+            <!-- Live Board -->
+            <div class="card glass-card">
+              <div class="card-header">
+                <h3>Live Operation Board</h3>
+                <div class="live-board-desc">Advance trip stages using card controls. Odometer/Expense triggers on Completion</div>
+              </div>
+              
+              <div class="live-board">
+                <!-- Columns corresponding to stages -->
+                <div class="board-column" data-status="Draft">
+                  <div class="board-column-header">
+                    <h4>Draft</h4>
+                    <span class="column-count" id="count-draft">0</span>
+                  </div>
+                  <div class="board-cards-container" id="container-draft"></div>
+                </div>
+                
+                <div class="board-column" data-status="Dispatched">
+                  <div class="board-column-header">
+                    <h4>Dispatched</h4>
+                    <span class="column-count" id="count-dispatched">0</span>
+                  </div>
+                  <div class="board-cards-container" id="container-dispatched"></div>
+                </div>
+
+                <div class="board-column" data-status="On Trip">
+                  <div class="board-column-header">
+                    <h4>On Trip</h4>
+                    <span class="column-count" id="count-ontrip">0</span>
+                  </div>
+                  <div class="board-cards-container" id="container-ontrip"></div>
+                </div>
+
+                <div class="board-column" data-status="Completed">
+                  <div class="board-column-header">
+                    <h4>Completed</h4>
+                    <span class="column-count" id="count-completed">0</span>
+                  </div>
+                  <div class="board-cards-container" id="container-completed"></div>
+                </div>
+
+                <div class="board-column" data-status="Cancelled">
+                  <div class="board-column-header">
+                    <h4>Cancelled</h4>
+                    <span class="column-count" id="count-cancelled">0</span>
+                  </div>
+                  <div class="board-cards-container" id="container-cancelled"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- ================= 5. MAINTENANCE VIEW ================= -->
+        <section id="view-maintenance" class="app-view hidden">
+          <div class="view-header">
+            <div>
+              <h1>Maintenance Registry</h1>
+              <p class="subtitle">Schedule and record logistics service records, repair logs, and costs</p>
+            </div>
+            <button class="btn btn-primary" onclick="openModal('modal-add-service')">+ Log Service Record</button>
+          </div>
+
+          <div class="card glass-card">
+            <div class="card-header">
+              <h3>Service Logs</h3>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>VEHICLE</th>
+                    <th>SERVICE TYPE</th>
+                    <th>COST (INR)</th>
+                    <th>DATE</th>
+                    <th>STATUS</th>
+                    <th>ACTIONS</th>
+                  </tr>
+                </thead>
+                <tbody id="maintenance-tbody">
+                  <!-- Rendered dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- ================= 6. FUEL & EXPENSES VIEW ================= -->
+        <section id="view-fuel" class="app-view hidden">
+          <div class="view-header">
+            <div>
+              <h1>Fuel &amp; Expense Management</h1>
+              <p class="subtitle">Fuel fill logs and operational expenses logs (tolls, maintenance and driver logs)</p>
+            </div>
+            <div class="btn-group">
+              <button class="btn btn-primary" onclick="openModal('modal-log-fuel')">+ Log Fuel</button>
+              <button class="btn btn-secondary" onclick="openModal('modal-add-expense')">+ Add Expense</button>
+            </div>
+          </div>
+
+          <div class="tabs-container">
+            <div class="tabs-header">
+              <button class="tab-btn active" onclick="switchExpenseTab('fuel-logs')">Fuel Fill-up Logs</button>
+              <button class="tab-btn" onclick="switchExpenseTab('other-expenses')">Other Expenses (Toll / Misc)</button>
+            </div>
+            
+            <div class="tabs-content">
+              <!-- Fuel Logs Pane -->
+              <div id="tab-fuel-logs" class="tab-pane active">
+                <div class="table-responsive">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>VEHICLE</th>
+                        <th>DATE</th>
+                        <th>LITERS</th>
+                        <th>FUEL COST (INR)</th>
+                      </tr>
+                    </thead>
+                    <tbody id="fuel-logs-tbody">
+                      <!-- Rendered dynamically -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Other Expenses Pane -->
+              <div id="tab-other-expenses" class="tab-pane">
+                <div class="table-responsive">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>TRIP</th>
+                        <th>VEHICLE</th>
+                        <th>TOLL COST (INR)</th>
+                        <th>OTHER COSTS (INR)</th>
+                        <th>MAINTENANCE (LINKED)</th>
+                        <th>TOTAL</th>
+                      </tr>
+                    </thead>
+                    <tbody id="other-expenses-tbody">
+                      <!-- Rendered dynamically -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="calc-footer-card glass-card">
+            <span>TOTAL OPERATIONAL COST (AUTO) = FUEL + MAINTENANCE + TOLL + OTHER</span>
+            <span class="large-cost-val" id="total-operational-cost">34,070</span>
+          </div>
+        </section>
+
+
+        <!-- ================= 7. REPORTS & ANALYTICS VIEW ================= -->
+        <section id="view-analytics" class="app-view hidden">
+          <div class="view-header">
+            <div>
+              <h1>Reports &amp; Analytics</h1>
+              <p class="subtitle">Performance reporting, resource returns, and statistics dashboard</p>
+            </div>
+            <button class="btn btn-primary" onclick="exportDataToCSV()">Export CSV</button>
+          </div>
+
+          <!-- Performance Metric Cards -->
+          <div class="analytics-metrics-grid">
+            <div class="analytics-stat-card">
+              <span class="lbl">FUEL EFFICIENCY</span>
+              <div class="val" id="val-fuel-efficiency">8.4 km/l</div>
+              <div class="formula">Calculated from completed trip logs</div>
+            </div>
+            <div class="analytics-stat-card">
+              <span class="lbl">FLEET UTILIZATION</span>
+              <div class="val" id="val-fleet-utilization">81%</div>
+              <div class="formula">% of registered assets on trip</div>
+            </div>
+            <div class="analytics-stat-card">
+              <span class="lbl">OPERATIONAL COST</span>
+              <div class="val" id="val-operational-cost">34,070</div>
+              <div class="formula">Fuel + Maintenance + Toll + Misc</div>
+            </div>
+            <div class="analytics-stat-card">
+              <span class="lbl">VEHICLE ROI</span>
+              <div class="val" id="val-vehicle-roi">14.2%</div>
+              <div class="formula">ROI = (Revenue - (Maint + Fuel)) / Acquisition Cost</div>
+            </div>
+          </div>
+
+          <!-- Charts Section -->
+          <div class="content-grid-two">
+            <!-- Monthly Revenue SVG Chart -->
+            <div class="card glass-card">
+              <div class="card-header">
+                <h3>Monthly Revenue Tracker</h3>
+              </div>
+              <div class="chart-wrapper">
+                <svg id="svg-monthly-revenue" class="svg-chart" viewBox="0 0 500 250">
+                  <!-- Generated dynamically -->
+                </svg>
+              </div>
+            </div>
+
+            <!-- Top Costliest Vehicles SVG Chart -->
+            <div class="card glass-card">
+              <div class="card-header">
+                <h3>Top Costliest Vehicles</h3>
+              </div>
+              <div class="chart-wrapper">
+                <svg id="svg-costly-vehicles" class="svg-chart" viewBox="0 0 500 250">
+                  <!-- Generated dynamically -->
+                </svg>
+              </div>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- ================= 8. NEW: USER MANAGEMENT VIEW ================= -->
+        <section id="view-users" class="app-view hidden">
+          <div class="view-header">
+            <div>
+              <h1>User Account Management</h1>
+              <p class="subtitle">Admin configurations for platform credentials and active user directories</p>
+            </div>
+            <button class="btn btn-primary" onclick="openModal('modal-add-user')">+ Add User</button>
+          </div>
+
+          <div class="card glass-card">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>NAME</th>
+                    <th>EMAIL</th>
+                    <th>ROLE</th>
+                    <th>STATUS</th>
+                    <th>ACTIONS</th>
+                  </tr>
+                </thead>
+                <tbody id="users-tbody">
+                  <!-- Rendered dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- ================= 9. NEW: AUDIT LOGS VIEW ================= -->
+        <section id="view-audit" class="app-view hidden">
+          <div class="view-header">
+            <div>
+              <h1>System Audit Logs</h1>
+              <p class="subtitle">Immutable ledger records logging platform actions, log entries, and credential validations</p>
+            </div>
+            <button class="btn btn-secondary" onclick="clearAuditLogsDirect()">Clear Log Ledger</button>
+          </div>
+
+          <div class="card glass-card">
+            <div class="table-responsive">
+              <table class="data-table small-table">
+                <thead>
+                  <tr>
+                    <th>TIMESTAMP</th>
+                    <th>USER ACCOUNT</th>
+                    <th>ROLE</th>
+                    <th>ACTION CODE</th>
+                    <th>DETAILS</th>
+                  </tr>
+                </thead>
+                <tbody id="audit-tbody">
+                  <!-- Rendered dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- ================= 10. NEW: DRIVER PORTAL VIEW ================= -->
+        <section id="view-driver-portal" class="app-view hidden">
+          <div class="view-header">
+            <div>
+              <h1>Driver In-Transit Portal</h1>
+              <p class="subtitle">Assigned route operations, trip progress updates and emergency diagnostics report</p>
+            </div>
+          </div>
+
+          <!-- Active Assigned Trips list -->
+          <div id="driver-trips-container" class="driver-portal-layout">
+            <!-- Loaded dynamically from app.js -->
+          </div>
+        </section>
+
+
+        <!-- ================= 11. SETTINGS & RBAC VIEW ================= -->
+        <section id="view-settings" class="app-view hidden">
+          <div class="view-header">
+            <div>
+              <h1>Settings &amp; Role Access Config</h1>
+              <p class="subtitle">Platform preferences and customizable RBAC permissions matrix</p>
+            </div>
+          </div>
+
+          <div class="content-grid-two">
+            <!-- General Settings -->
+            <div class="card glass-card">
+              <div class="card-header">
+                <h3>General Settings</h3>
+              </div>
+              <form id="settings-form" class="standard-form">
+                <div class="form-group">
+                  <label for="settings-depot">DEPOT NAME</label>
+                  <input type="text" id="settings-depot" required value="Gandhinagar Depot GJ4">
+                </div>
+
+                <div class="form-group">
+                  <label for="settings-currency">CURRENCY</label>
+                  <select id="settings-currency">
+                    <option value="INR">INR (Rs)</option>
+                    <option value="USD">USD ($)</option>
+                    <option value="EUR">EUR (€)</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="settings-distance">DISTANCE UNIT</label>
+                  <select id="settings-distance">
+                    <option value="Kilometers">Kilometers (km)</option>
+                    <option value="Miles">Miles (mi)</option>
+                  </select>
+                </div>
+
+                <div class="form-actions">
+                  <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+              </form>
+            </div>
+
+            <!-- RBAC Settings Matrix -->
+            <div class="card glass-card">
+              <div class="card-header">
+                <h3>Role-Based Access (RBAC) Controls</h3>
+              </div>
+              <div class="table-responsive">
+                <table class="data-table small-table">
+                  <thead>
+                    <tr>
+                      <th>ROLE</th>
+                      <th>VEHICLE REG.</th>
+                      <th>DRIVERS</th>
+                      <th>TRIPS</th>
+                      <th>FUEL/EXP</th>
+                      <th>ANALYTICS</th>
+                    </tr>
+                  </thead>
+                  <tbody id="rbac-settings-tbody">
+                    <!-- Populated dynamically and fully interactive -->
+                  </tbody>
+                </table>
+              </div>
+              <div class="field-hint" style="margin-top: 12px; font-style: italic;">
+                * System Administrator only configuration matrix. Modifying checkboxes updates role capabilities instantly.
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+
+  <!-- ================================= MODALS ================================= -->
+
+  <!-- Add User Modal (Admin only) -->
+  <div id="modal-add-user" class="modal-wrapper hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>+ Add User Account</h3>
+        <span class="modal-close" onclick="closeModal('modal-add-user')">&times;</span>
+      </div>
+      <form id="add-user-form" class="standard-form">
+        <div class="form-group">
+          <label for="user-name">FULL NAME</label>
+          <input type="text" id="user-name" required placeholder="e.g. Ramesh Shah">
+        </div>
+        <div class="form-group">
+          <label for="user-email">EMAIL ADDRESS</label>
+          <input type="email" id="user-email" required placeholder="e.g. ramesh@transitops.in">
+        </div>
+        <div class="form-group">
+          <label for="user-role">SYSTEM ROLE</label>
+          <select id="user-role" required>
+            <option value="Administrator">Administrator</option>
+            <option value="Fleet Manager">Fleet Manager</option>
+            <option value="Dispatcher">Dispatcher</option>
+            <option value="Driver">Driver</option>
+            <option value="Safety Officer">Safety Officer</option>
+            <option value="Financial Analyst">Financial Analyst</option>
+          </select>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Create User</button>
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-add-user')">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Driver Emergency Breakdown Report Modal -->
+  <div id="modal-driver-issue" class="modal-wrapper hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>🚨 Report Emergency Breakdown</h3>
+        <span class="modal-close" onclick="closeModal('modal-driver-issue')">&times;</span>
+      </div>
+      <div class="modal-info-panel" style="background-color: rgba(244, 63, 94, 0.05); border-color: var(--color-rose); color: #fecdd3;">
+        <p>Warning: Reporting a breakdown cancels the trip and routes the vehicle to the maintenance shop immediately.</p>
+      </div>
+      <form id="driver-issue-form" class="standard-form">
+        <input type="hidden" id="issue-trip-id">
+        <input type="hidden" id="issue-vehicle-reg">
+        
+        <div class="form-group">
+          <label for="issue-desc">BREAKDOWN / ISSUE DESCRIPTION</label>
+          <textarea id="issue-desc" rows="3" required placeholder="Describe the engine anomaly, tire puncture, brake failure, etc..."></textarea>
+        </div>
+        
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary bg-rose" style="box-shadow: 0 4px 14px var(--color-rose-glow);">Submit Breakdown Report</button>
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-driver-issue')">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add Vehicle Modal -->
+  <div id="modal-add-vehicle" class="modal-wrapper hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>+ Add New Vehicle</h3>
+        <span class="modal-close" onclick="closeModal('modal-add-vehicle')">&times;</span>
+      </div>
+      <form id="add-vehicle-form" class="standard-form">
+        <div class="form-group">
+          <label for="vehicle-reg">REGISTRATION NO. (UNIQUE)</label>
+          <input type="text" id="vehicle-reg" required placeholder="e.g. GJ01AB1234">
+          <div id="vehicle-reg-error" class="error-text-small hidden">❌ Reg number already exists.</div>
+        </div>
+        <div class="form-group">
+          <label for="vehicle-model">MODEL / NAME</label>
+          <input type="text" id="vehicle-model" required placeholder="e.g. VAN-10">
+        </div>
+        <div class="form-group">
+          <label for="vehicle-type">VEHICLE TYPE</label>
+          <select id="vehicle-type" required>
+            <option value="Van">Van</option>
+            <option value="Truck">Truck</option>
+            <option value="Mini">Mini</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="vehicle-capacity">CAPACITY (KG)</label>
+          <input type="number" id="vehicle-capacity" required min="1" placeholder="e.g. 500">
+        </div>
+        <div class="form-group">
+          <label for="vehicle-odometer">ODOMETER (KM)</label>
+          <input type="number" id="vehicle-odometer" required min="0" placeholder="e.g. 10000">
+        </div>
+        <div class="form-group">
+          <label for="vehicle-cost">ACQUISITION COST (INR)</label>
+          <input type="number" id="vehicle-cost" required min="0" placeholder="e.g. 600000">
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Save Vehicle</button>
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-add-vehicle')">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add Driver Modal -->
+  <div id="modal-add-driver" class="modal-wrapper hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>+ Add New Driver</h3>
+        <span class="modal-close" onclick="closeModal('modal-add-driver')">&times;</span>
+      </div>
+      <form id="add-driver-form" class="standard-form">
+        <div class="form-group">
+          <label for="driver-name">DRIVER NAME</label>
+          <input type="text" id="driver-name" required placeholder="e.g. Ramesh Kumar">
+        </div>
+        <div class="form-group">
+          <label for="driver-license">LICENSE NO.</label>
+          <input type="text" id="driver-license" required placeholder="e.g. DL-88991">
+        </div>
+        <div class="form-group">
+          <label for="driver-category">LICENSE CATEGORY</label>
+          <select id="driver-category" required>
+            <option value="LMV">LMV (Light Motor Vehicle)</option>
+            <option value="HMV">HMV (Heavy Motor Vehicle)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="driver-expiry">LICENSE EXPIRY DATE (YYYY-MM)</label>
+          <input type="month" id="driver-expiry" required>
+        </div>
+        <div class="form-group">
+          <label for="driver-contact">CONTACT NO.</label>
+          <input type="text" id="driver-contact" required placeholder="e.g. 98765xxxxx">
+        </div>
+        <div class="form-group">
+          <label for="driver-safety">SAFETY SCORE (0-100%)</label>
+          <input type="number" id="driver-safety" required min="0" max="100" value="95">
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Save Driver</button>
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-add-driver')">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Log Service Record Modal -->
+  <div id="modal-add-service" class="modal-wrapper hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>+ Log Service Record</h3>
+        <span class="modal-close" onclick="closeModal('modal-add-service')">&times;</span>
+      </div>
+      <form id="add-service-form" class="standard-form">
+        <div class="form-group">
+          <label for="service-vehicle">VEHICLE</label>
+          <select id="service-vehicle" required>
+            <!-- Populated dynamically -->
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="service-type">SERVICE TYPE</label>
+          <select id="service-type" required>
+            <option value="Oil Change">Oil Change</option>
+            <option value="Engine Repair">Engine Repair</option>
+            <option value="Tyre Replace">Tyre Replace</option>
+            <option value="Brake Service">Brake Service</option>
+            <option value="General Inspection">General Inspection</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="service-cost">COST (INR)</label>
+          <input type="number" id="service-cost" required min="0" placeholder="e.g. 5000">
+        </div>
+        <div class="form-group">
+          <label for="service-date">SERVICE DATE</label>
+          <input type="date" id="service-date" required>
+        </div>
+        <div class="form-group">
+          <label for="service-status">VEHICLE STATUS POST-LOG</label>
+          <select id="service-status" required>
+            <option value="In Shop">In Shop (Still under service)</option>
+            <option value="Completed">Completed (Available immediately)</option>
+          </select>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Log Service</button>
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-add-service')">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Log Fuel Modal -->
+  <div id="modal-log-fuel" class="modal-wrapper hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>+ Log Fuel Fill-up</h3>
+        <span class="modal-close" onclick="closeModal('modal-log-fuel')">&times;</span>
+      </div>
+      <form id="log-fuel-form" class="standard-form">
+        <div class="form-group">
+          <label for="fuel-vehicle">VEHICLE</label>
+          <select id="fuel-vehicle" required>
+            <!-- Populated dynamically -->
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="fuel-liters">LITERS (L)</label>
+          <input type="number" id="fuel-liters" required min="1" step="0.1" placeholder="e.g. 45">
+        </div>
+        <div class="form-group">
+          <label for="fuel-cost">COST (INR)</label>
+          <input type="number" id="fuel-cost" required min="1" placeholder="e.g. 3500">
+        </div>
+        <div class="form-group">
+          <label for="fuel-date">DATE</label>
+          <input type="date" id="fuel-date" required>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Log Fuel</button>
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-log-fuel')">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add Expense Modal -->
+  <div id="modal-add-expense" class="modal-wrapper hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>+ Add Toll &amp; Misc Expense</h3>
+        <span class="modal-close" onclick="closeModal('modal-add-expense')">&times;</span>
+      </div>
+      <form id="add-expense-form" class="standard-form">
+        <div class="form-group">
+          <label for="expense-trip">LINKED COMPLETED TRIP</label>
+          <select id="expense-trip" required>
+            <!-- Populated dynamically with completed trips -->
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="expense-toll">TOLL CHARGES (INR)</label>
+          <input type="number" id="expense-toll" required min="0" placeholder="e.g. 120">
+        </div>
+        <div class="form-group">
+          <label for="expense-other">OTHER MISC CHARGES (INR)</label>
+          <input type="number" id="expense-other" required min="0" placeholder="e.g. 50">
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Add Expense</button>
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-add-expense')">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Trip Completion Details Modal (Automatically shown when moving Trip to Complete) -->
+  <div id="modal-complete-trip" class="modal-wrapper hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Complete Trip: Logging &amp; Releasing Assets</h3>
+        <span class="modal-close" onclick="closeModal('modal-complete-trip')">&times;</span>
+      </div>
+      <div class="modal-info-panel">
+        <p>Completing trip <strong id="complete-trip-id">TR001</strong>. This will release vehicle <strong id="complete-trip-vehicle">VAN-05</strong> and driver <strong id="complete-trip-driver">Alex</strong> as "Available". Please input the trip completion details below to auto-populate the fuel, expense, and odometer records.</p>
+      </div>
+      <form id="complete-trip-form" class="standard-form">
+        <input type="hidden" id="complete-trip-hidden-id">
+        
+        <div class="form-group">
+          <label for="complete-odometer">FINAL VEHICLE ODOMETER (KM)</label>
+          <input type="number" id="complete-odometer" required min="1" placeholder="Must exceed current odometer">
+          <div class="field-hint" id="complete-odometer-current">Current odometer: 74,000 km</div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="complete-fuel-liters">FUEL SPENT (LITERS)</label>
+            <input type="number" id="complete-fuel-liters" required min="0" step="0.1" placeholder="e.g. 15">
+          </div>
+          <div class="form-group">
+            <label for="complete-fuel-cost">FUEL COST (INR)</label>
+            <input type="number" id="complete-fuel-cost" required min="0" placeholder="e.g. 1200">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="complete-toll">TOLL COSTS (INR)</label>
+            <input type="number" id="complete-toll" required min="0" placeholder="e.g. 100">
+          </div>
+          <div class="form-group">
+            <label for="complete-other">OTHER / MISC COSTS (INR)</label>
+            <input type="number" id="complete-other" required min="0" placeholder="e.g. 50">
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Complete Trip &amp; Log Costs</button>
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-complete-trip')">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="app.js"></script>
+</body>
+</html>
