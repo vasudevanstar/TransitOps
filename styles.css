@@ -1150,6 +1150,18 @@ body {
   margin-top: 2px;
 }
 
+.trip-dispatcher-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+}
+
+.trip-dispatcher-layout .card {
+  min-width: 0;
+  overflow: hidden;
+}
+
 /* Live Operational Board */
 .live-board-desc {
   font-size: 11px;

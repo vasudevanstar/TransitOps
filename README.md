@@ -29,9 +29,9 @@ TransitOps is a modern, single-page enterprise web application designed to strea
 
 ## 📁 File Structure
 
-- [index.html](file:///d:/tans/index.html) — Core DOM structure and UI layout.
-- [styles.css](file:///d:/tans/styles.css) — Custom modern stylesheets, themes, and layouts.
-- [app.js](file:///d:/tans/app.js) — Client-side state management, seed data, and RBAC matrix.
+- [index.html](index.html) — Core DOM structure and UI layout.
+- [styles.css](styles.css) — Custom modern stylesheets, themes, and layouts.
+- [app.js](app.js) — Client-side state management, seed data, and RBAC matrix.
 
 ## 🏁 Quick Start
 
