@@ -1159,11 +1159,14 @@ body {
 
 .live-board {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(5, minmax(200px, 1fr));
   gap: 10px;
   min-height: 400px;
   align-items: stretch;
+  overflow-x: auto;
+  padding-bottom: 12px;
 }
+
 
 .board-column {
   background-color: rgba(255,255,255,0.01);
@@ -1731,4 +1734,186 @@ body {
 .card-full {
   grid-column: 1 / -1 !important;
 }
+
+/* Custom Dropbox Styling: Black with White Text */
+select,
+select option,
+option {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+/* Ensure focus states keep black background and white text with premium glow */
+select:focus,
+.form-group select:focus,
+.filter-group select:focus,
+.select-sm:focus {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  border-color: var(--color-cyan) !important;
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.3) !important;
+}
+
+/* Responsive Layout Corrections & Mobile Compatibility */
+@media (max-width: 1100px) {
+  .auth-card {
+    width: 100%;
+    height: auto;
+    max-width: 550px;
+    flex-direction: column;
+  }
+  .auth-brand-side {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--border-glass);
+    padding: 32px;
+  }
+  .auth-form-side {
+    width: 100%;
+    padding: 36px 32px;
+  }
+  .auth-brand-side h1 {
+    font-size: 30px;
+  }
+  .auth-brand-side .subtitle {
+    margin-bottom: 24px;
+  }
+}
+
+@media (max-width: 992px) {
+  .app-layout {
+    flex-direction: column;
+    height: auto;
+    overflow-y: auto;
+  }
+  
+  .sidebar {
+    width: 100%;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--border-glass);
+    padding: 16px 24px;
+    gap: 12px;
+  }
+  
+  .sidebar-brand {
+    margin-bottom: 12px;
+  }
+  
+  .nav-section-title {
+    display: none;
+  }
+  
+  .sidebar-nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  
+  .nav-item {
+    margin-bottom: 0;
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+  
+  .nav-item.active {
+    border-left: none;
+    border-bottom: 2px solid var(--color-cyan);
+    padding-left: 12px;
+    padding-bottom: 6px;
+  }
+  
+  .sidebar-footer {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--border-glass);
+    padding-top: 12px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  
+  .rbac-switcher-inline {
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .rbac-switcher-inline label {
+    margin-bottom: 0;
+  }
+  
+  .main-workspace {
+    height: auto;
+    overflow-y: visible;
+  }
+  
+  .app-header {
+    padding: 16px 24px;
+    height: auto;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  
+  .view-content-wrapper {
+    padding: 24px;
+    overflow-y: visible;
+  }
+  
+  .content-grid-two {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .analytics-metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .filter-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 16px;
+  }
+  
+  .search-filter {
+    margin-left: 0;
+    width: 100%;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 576px) {
+  .view-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  
+  .view-header h1 {
+    font-size: 22px;
+  }
+  
+  .view-header .btn,
+  .view-header .btn-group {
+    width: 100%;
+  }
+  
+  .analytics-metrics-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .modal-card {
+    padding: 20px;
+  }
+}
+
+
 
